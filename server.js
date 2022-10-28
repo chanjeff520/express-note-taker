@@ -3,7 +3,6 @@ const path = require('path');
 
 //the port we are using
 const PORT = process.env.port || 3001;
-
 //instanciates the express function
 app = express();
 
@@ -13,6 +12,11 @@ app.use(express.static('public'));
 //for the home page of note taking
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
+})
+
+//for the notes page
+app.get('/notes', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/notes.html'));
 })
 
 //sets up the webpage with a port of 3001 or the port given
