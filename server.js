@@ -2,13 +2,11 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
-const util = require('util')
-const {readFromFile, readAndAppend, writeToFile} = require('./helper/fsUtils')
 //the database storing the notes.
 const filePath = './db/db.json';
 
 //the port we are using
-const PORT = process.env.port || 3001;
+const PORT = process.env.PORT || 3001;
 //instanciates the express function
 app = express();
 
@@ -31,38 +29,35 @@ app.get('/notes', (req, res) => {
 //to get the notes in db.json
 app.get('/api/notes', (req, res) => {
     //use promisify so we can use .then to parse the db.json on to the screen
-    readFromFile('./db/db.json').then((data) => res.json(JSON.parse(data)));
+    res.sendFile(path.join(__dirname, filePath));
 });
-
-//get a specific note that was clicked on
-app.get('/api/notes/:title', (req, res) => {
-    //use promisify so we can use .then to parse the db.json on to the screen
-    const title = req.params.title;
-    readFromFile('./db/db.json')
-    .then((data) => JSON.parse(data))
-    .then((json) => {
-        const result = json.filter((note) => note.title === title);
-        return result.lenght >0 ? res.json(result) : res.json('No note found');
-    });
-});
-
 
 //to save the note currently being worked on
 app.post('/api/notes', (req, res) => {
-    console.log(req.body);
-    // get the data from 
+    //gets the db.json from the filepath and then make it into an array/object
+    const noteArr = JSON.parse(fs.readFileSync(filePath, "utf-8"));
+    //variable for the newNote
     const {title, text} = req.body;
+    //creating an element of the db.json array
+    const newNote = {
+        title,
+        text,
+        id : (noteArr.length).toString(),
+    };
 
-    if (req.body) {
-        const newNote = {
-            title,
-            text,
-        };
-        readAndAppend(newNote, filePath);
-    }else{
-        res.error('Error in adding the Note')
-    }
+    //add newNote to the noteArr, which is also the db.json
+    noteArr.push(newNote);
+
+    //writeFile to db.json
+    fs.writeFileSync(filePath, JSON.stringify(noteArr));
+    //this is the response 
+    res.json(noteArr);
 });
+
+app.delete('/api/notes', (req,res) => {
+    
+});
+
 
 //sets up the webpage with a port of 3001 or the port given
 app.listen(PORT, () => {
