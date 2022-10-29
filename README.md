@@ -2,7 +2,7 @@
 
 ## Deployed Link
 
-https://git.heroku.com/very-generic-note-taker.git
+https://very-generic-note-taker.herokuapp.com/
 
 ## Technology
 
