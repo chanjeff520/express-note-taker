@@ -2,6 +2,7 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
+const { timeStamp } = require('console');
 //the database storing the notes.
 const filePath = './db/db.json';
 
@@ -42,7 +43,7 @@ app.post('/api/notes', (req, res) => {
     const newNote = {
         title,
         text,
-        id : (noteArr.length).toString(),
+        id : (noteArr.length),
     };
 
     //add newNote to the noteArr, which is also the db.json
@@ -54,7 +55,20 @@ app.post('/api/notes', (req, res) => {
     res.json(noteArr);
 });
 
-app.delete('/api/notes', (req,res) => {
+app.delete('/api/notes/:id', (req,res) => {
+    const id = req.params.id;
+    let noteArr = JSON.parse(fs.readFileSync(filePath, "utf-8"));
+
+
+    noteArr = noteArr.filter((note) => note.id != id)
+    for(let i=0; i<noteArr.length; i++){
+        noteArr[i].id = i;
+    }
+
+    //write the file to db.json
+    fs.writeFileSync(filePath, JSON.stringify(noteArr));
+    //this is the response 
+    res.json(noteArr);
     
 });
 
