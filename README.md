@@ -2,6 +2,8 @@
 
 ## Deployed Link
 
+https://git.heroku.com/very-generic-note-taker.git
+
 ## Technology
 
 - JavaScript: Programming Language used
