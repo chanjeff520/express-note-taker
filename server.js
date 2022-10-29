@@ -2,7 +2,6 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
-const { timeStamp } = require('console');
 //the database storing the notes.
 const filePath = './db/db.json';
 
@@ -55,12 +54,16 @@ app.post('/api/notes', (req, res) => {
     res.json(noteArr);
 });
 
+//to delete notes
 app.delete('/api/notes/:id', (req,res) => {
+    //get the id from the parameters
     const id = req.params.id;
+    //parse the data from note db.json
     let noteArr = JSON.parse(fs.readFileSync(filePath, "utf-8"));
 
-
+    //use the array funciton filter to get rid of the id that needed to be deleted
     noteArr = noteArr.filter((note) => note.id != id)
+    //need to make new id after deleting
     for(let i=0; i<noteArr.length; i++){
         noteArr[i].id = i;
     }
