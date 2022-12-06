@@ -2,7 +2,7 @@
 
 ## Deployed Link
 
-https://very-generic-note-taker.herokuapp.com/
+https://very-generic-note-taker.herokuapp.com/ (Link is current not running)
 
 ## Technology
 
